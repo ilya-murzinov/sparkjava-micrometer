@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+    id 'java-library'
+    id 'maven-publish'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.sparkjava:spark-core:2.8.0'
+    compile 'io.micrometer:micrometer-core:1.1.1'
+
+    testCompile "org.assertj:assertj-core:${assertjVersion}"
+    testCompile "io.rest-assured:rest-assured:${restAssuredVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junipiterVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junipiterVersion}"
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}
