@@ -45,7 +45,6 @@ class SparkMeteredFunctionalTest {
     void should_register_get_method_call() {
         // when
         client.get("/foo_get").body();
-        client.get("/path/foo_get").body();
 
         // then
         final Timer timer = registry.get(METRIC_NAME)
@@ -53,7 +52,7 @@ class SparkMeteredFunctionalTest {
                 .tag(METHOD_TAG, "get")
                 .timer();
 
-        assertThat(timer.count()).isEqualTo(2);
+        assertThat(timer.count()).isEqualTo(1);
         assertThat(timer.max(MILLISECONDS)).isGreaterThan(SLEEP);
     }
 
@@ -61,7 +60,6 @@ class SparkMeteredFunctionalTest {
     void should_register_post_method_call() {
         // when
         client.post("/foo_post").body();
-        client.post("/path/foo_post").body();
 
         // then
         final Timer timer = registry.get(METRIC_NAME)
@@ -69,7 +67,7 @@ class SparkMeteredFunctionalTest {
                 .tag(METHOD_TAG, "post")
                 .timer();
 
-        assertThat(timer.count()).isEqualTo(2);
+        assertThat(timer.count()).isEqualTo(1);
         assertThat(timer.max(MILLISECONDS)).isGreaterThan(SLEEP);
     }
 
@@ -77,7 +75,6 @@ class SparkMeteredFunctionalTest {
     void should_register_put_method_call() {
         // when
         client.put("/foo_put").body();
-        client.put("/path/foo_put").body();
 
         // then
         final Timer timer = registry.get(METRIC_NAME)
@@ -85,7 +82,7 @@ class SparkMeteredFunctionalTest {
                 .tag(METHOD_TAG, "put")
                 .timer();
 
-        assertThat(timer.count()).isEqualTo(2);
+        assertThat(timer.count()).isEqualTo(1);
         assertThat(timer.max(MILLISECONDS)).isGreaterThan(SLEEP);
     }
 
@@ -93,7 +90,6 @@ class SparkMeteredFunctionalTest {
     void should_register_delete_method_call() {
         // when
         client.delete("/foo_delete").body();
-        client.delete("/path/foo_delete").body();
 
         // then
         final Timer timer = registry.get(METRIC_NAME)
@@ -101,7 +97,67 @@ class SparkMeteredFunctionalTest {
                 .tag(METHOD_TAG, "delete")
                 .timer();
 
-        assertThat(timer.count()).isEqualTo(2);
+        assertThat(timer.count()).isEqualTo(1);
+        assertThat(timer.max(MILLISECONDS)).isGreaterThan(SLEEP);
+    }
+
+    @Test
+    void should_register_get_with_path_method_call() {
+        // when
+        client.get("/path/foo_get").body();
+
+        // then
+        final Timer timer = registry.get(METRIC_NAME)
+                .tag(URL_TAG, "/path/foo_get")
+                .tag(METHOD_TAG, "get")
+                .timer();
+
+        assertThat(timer.count()).isEqualTo(1);
+        assertThat(timer.max(MILLISECONDS)).isGreaterThan(SLEEP);
+    }
+
+    @Test
+    void should_register_post_with_path_method_call() {
+        // when
+        client.post("/path/foo_post").body();
+
+        // then
+        final Timer timer = registry.get(METRIC_NAME)
+                .tag(URL_TAG, "/path/foo_post")
+                .tag(METHOD_TAG, "post")
+                .timer();
+
+        assertThat(timer.count()).isEqualTo(1);
+        assertThat(timer.max(MILLISECONDS)).isGreaterThan(SLEEP);
+    }
+
+    @Test
+    void should_register_put_with_path_method_call() {
+        // when
+        client.put("/path/foo_put").body();
+
+        // then
+        final Timer timer = registry.get(METRIC_NAME)
+                .tag(URL_TAG, "/path/foo_put")
+                .tag(METHOD_TAG, "put")
+                .timer();
+
+        assertThat(timer.count()).isEqualTo(1);
+        assertThat(timer.max(MILLISECONDS)).isGreaterThan(SLEEP);
+    }
+
+    @Test
+    void should_register_delete_with_path_method_call() {
+        // when
+        client.delete("/path/foo_delete").body();
+
+        // then
+        final Timer timer = registry.get(METRIC_NAME)
+                .tag(URL_TAG, "/path/foo_delete")
+                .tag(METHOD_TAG, "delete")
+                .timer();
+
+        assertThat(timer.count()).isEqualTo(1);
         assertThat(timer.max(MILLISECONDS)).isGreaterThan(SLEEP);
     }
 

@@ -31,10 +31,12 @@ public class MeteredSpark extends Routable {
 
     @Override
     protected void addRoute(String httpMethod, RouteImpl route) {
+        final String fullPath = service.getPaths() + route.getPath();
+
         service.addRoute(httpMethod, new RouteImpl(route.getPath()) {
             @Override
             public Object handle(Request request, Response response) throws Exception {
-                return metered(route.getPath(), httpMethod, () -> route.handle(request, response));
+                return metered(fullPath, httpMethod, () -> route.handle(request, response));
             }
         });
     }
