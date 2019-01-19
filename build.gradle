@@ -20,6 +20,13 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junipiterVersion}"
 }
 
+test {
+    useJUnitPlatform()
+}
+
+build.dependsOn += test
+publishToMavenLocal.dependsOn += build
+
 publishing {
     publications {
         maven(MavenPublication) {
